@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Random Method</title>
+    <style>
+        main {
+            left: 50%;
+            top: 50%;
+            margin: 120px;
+            border: black solid 2px;
+            transform: translateX(-50%) translateY(-50%);
+            position: absolute;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-auto-rows: 100px;
+        }
+        main > div{
+            background: #a185ff;
+            width: 100px;
+        }
+
+        main > div:nth-child(odd){
+            background: #64ff7f;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div> </div>
+        <div> </div>
+        <div> </div>
+    </main>
+</body>
+</html>
