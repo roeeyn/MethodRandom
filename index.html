@@ -55,6 +55,15 @@
             width: 2px;
         }
 
+        .section-6 {
+            display: grid;
+            grid-template-columns: repeat(384, 1fr);
+        }
+        .section-6 > div{
+            height: 1px;
+            width: 1px;
+        }
+
     </style>
 </head>
 <body onload="onWindowLoad()">
@@ -64,25 +73,33 @@
         <section class="section-3"></section>
         <section class="section-4"></section>
         <section class="section-5"></section>
+        <section class="section-6"></section>
     </main>
     <script>
+
+        const sectionsNumber = 6;
+
+        const initialWidth = 12;
+        const initialHeight = 34;
 
         const loadSection = (sectionNumber, squares) => {
           const element = document.querySelector(`.section-${sectionNumber}`);
           for (let i = 0; i < squares; i++) {
             const randomColor = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
-            const cosa = document.createElement('div');
-            cosa.style.backgroundColor = randomColor;
-            element.appendChild(cosa);
+            const newDiv = document.createElement('div');
+            newDiv.style.backgroundColor = randomColor;
+            element.appendChild(newDiv);
           }
         };
 
         const onWindowLoad = () => {
-          loadSection(1, 34 * 12);
-          loadSection(2, 68 * 24);
-          loadSection(3, 136 * 48);
-          loadSection(4, 272 * 96);
-          loadSection(5, 344 * 192);
+
+          for (let i = 1; i <= sectionsNumber ; i++) {
+            const exponent = Math.pow(2, i-1);
+            loadSection(i, exponent * initialHeight * exponent * initialWidth);
+          }
+
+
         };
 
     </script>
