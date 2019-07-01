@@ -98,7 +98,7 @@
     <script>
 
         // ********** Amount of sections you want ************
-        const sectionsNumber = 5;
+        const sectionsNumber = 3;
         // ***************************************************
 
         const initialWidth = 12;
@@ -116,6 +116,7 @@
               const newColor = mutations[0].target.childNodes[index].style.backgroundColor;
               if (newColor === newDiv.style.backgroundColor) {
                 observer.disconnect();
+                console.log('Revisé', index, 'y tiene el CSS adecuado y está como hijo adecuado')
                 resolve('Rendered thing');
               }
 
@@ -134,10 +135,10 @@
             }
         };
 
-        const onWindowLoad = () => {
+        const onWindowLoad = async () => {
           for (let i = 1; i <= sectionsNumber ; i++) {
             const exponent = Math.pow(2, i-1);
-            loadSection(i, exponent * initialHeight * exponent * initialWidth);
+            await loadSection(i, exponent * initialHeight * exponent * initialWidth);
           }
         };
 
