@@ -98,41 +98,47 @@
     <script>
 
         // ********** Amount of sections you want ************
-        const sectionsNumber = 1;
+        const sectionsNumber = 5;
         // ***************************************************
 
         const initialWidth = 12;
         const initialHeight = 34;
 
-        const loadSection = (sectionNumber, squares) => {
+        const getRandomColor = () => '#'+(Math.random()*0xFFFFFF<<0).toString(16);
+
+        const addNewDiv = (element, index) => new Promise((resolve, reject) => {
+
+          const newDiv = document.createElement('div');
+          newDiv.style.backgroundColor = getRandomColor();
+
+          const observer = new MutationObserver(function(mutations) {
+            if (element.contains(newDiv)) {
+              const newColor = mutations[0].target.childNodes[index].style.backgroundColor;
+              if (newColor === newDiv.style.backgroundColor) {
+                observer.disconnect();
+                resolve('Rendered thing');
+              }
+
+            }
+          });
+
+          observer.observe(element, { attributes: false, childList: true, characterData: false, subtree:true });
+
+          element.appendChild(newDiv);
+        });
+
+        const loadSection = async (sectionNumber, squares) => {
             const element = document.querySelector(`.section-${sectionNumber}`);
             for (let i = 0; i < squares; i++) {
-                const randomColor = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
-                const newDiv = document.createElement('div');
-                newDiv.style.backgroundColor = randomColor;
-
-                const observer = new MutationObserver(function(mutations) {
-                    if (element.contains(newDiv)) {
-                        observer.disconnect();
-                    }
-                });
-
-                observer.observe(element, { attributes: false, childList: true, characterData: false, subtree:true });
-
-                element.appendChild(newDiv);
-
+               await addNewDiv(element, i);
             }
         };
 
         const onWindowLoad = () => {
-
           for (let i = 1; i <= sectionsNumber ; i++) {
             const exponent = Math.pow(2, i-1);
             loadSection(i, exponent * initialHeight * exponent * initialWidth);
-            console.log(`Acabando sección ${i+1}`);
           }
-
-
         };
 
     </script>
