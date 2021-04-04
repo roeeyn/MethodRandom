@@ -1,147 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Random Method</title>
-    <style>
-
-        main {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-        }
-
-        main > div {
-            width: 100%;
-            height: 100%;
-            position: relative;
-        }
-
-        .wrapper-1{
-            width: 100%;
-            height: 100%;
-            background: rgba(124, 124, 124, 0.8);
-            position: absolute;
-            z-index: 1;
-        }
-
-        .section-1 {
-            display: grid;
-            z-index: 0;
-            grid-template-columns: repeat(12, 1fr);
-        }
-        .section-1 > div{
-            z-index: 0;
-            height: 32px;
-            width: 32px;
-        }
-
-        .section-2 {
-            display: grid;
-            grid-template-columns: repeat(24, 1fr);
-        }
-        .section-2 > div{
-            height: 16px;
-            width: 16px;
-        }
-
-        .section-3 {
-            display: grid;
-            grid-template-columns: repeat(48, 1fr);
-        }
-        .section-3 > div{
-            height: 8px;
-            width: 8px;
-        }
-
-        .section-4 {
-            display: grid;
-            grid-template-columns: repeat(96, 1fr);
-        }
-        .section-4 > div{
-            height: 4px;
-            width: 4px;
-        }
-
-        .section-5 {
-            display: grid;
-            grid-template-columns: repeat(192, 1fr);
-        }
-
-        .section-5 > div{
-            height: 2px;
-            width: 2px;
-        }
-
-        .section-6 {
-            display: grid;
-            grid-template-columns: repeat(384, 1fr);
-        }
-        .section-6 > div{
-            height: 1px;
-            width: 1px;
-        }
-
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="reset.css">
+  <link rel="stylesheet" href="index.css">
+  <title>Method Random</title>
 </head>
-<body onload="onWindowLoad()">
-    <main>
-        <div>
-            <div class=""></div>
-            <section class="section-1"></section>
+
+<body onload="onBodyLoad()">
+    <header class="header">
+      <section class="header-section">
+        <h1>Method Random</h1>
+      </section>
+      <section class="menu-section">
+        <div class="menu-group">
+          <p class="menu-option"><a href="http://www.lozano-hemmer.com/method_random.php">About Method Random</a></p>
+          <p class="menu-option"><a href="https://en.wikipedia.org/wiki/Rafael_Lozano-Hemmer">About Lozano Hemmer</a></p>
+          <p class="menu-option"><a href="https://github.com/roeeyn">About Roeeyn</a></p>
+          <p class="menu-option"><a href="https://noopschallenge.com/challenges/hexbot">About GitHub Noops</a></p>
+          <p class="menu-option"><a href="https://github.com/roeeyn/MethodRandom-Canvas">View this on GitHub</a></p>
         </div>
-        <section class="section-2"></section>
-        <section class="section-3"></section>
-        <section class="section-4"></section>
-        <section class="section-5"></section>
-        <section class="section-6"></section>
-    </main>
-    <script>
-
-        // ********** Amount of sections you want ************
-        const sectionsNumber = 3;
-        // ***************************************************
-
-        const initialWidth = 12;
-        const initialHeight = 34;
-
-        const getRandomColor = () => '#'+(Math.random()*0xFFFFFF<<0).toString(16);
-
-        const addNewDiv = (element, index) => new Promise((resolve, reject) => {
-
-          const newDiv = document.createElement('div');
-          newDiv.style.backgroundColor = getRandomColor();
-
-          const observer = new MutationObserver(function(mutations) {
-            if (element.contains(newDiv)) {
-              const newColor = mutations[0].target.childNodes[index].style.backgroundColor;
-              if (newColor === newDiv.style.backgroundColor) {
-                observer.disconnect();
-                console.log('Revisé', index, 'y tiene el CSS adecuado y está como hijo adecuado')
-                resolve('Rendered thing');
-              }
-
-            }
-          });
-
-          observer.observe(element, { attributes: false, childList: true, characterData: false, subtree:true });
-
-          element.appendChild(newDiv);
-        });
-
-        const loadSection = async (sectionNumber, squares) => {
-            const element = document.querySelector(`.section-${sectionNumber}`);
-            for (let i = 0; i < squares; i++) {
-               await addNewDiv(element, i);
-            }
-        };
-
-        const onWindowLoad = async () => {
-          for (let i = 1; i <= sectionsNumber ; i++) {
-            const exponent = Math.pow(2, i-1);
-            await loadSection(i, exponent * initialHeight * exponent * initialWidth);
-          }
-        };
-
-    </script>
+      </section>
+    </header>
+    <main class="main">
+      <h1>Method Random - a tribute to Lozano Hemmer's work</h1>
+      <p>Method Random is an artwork of the mexican artist Lozano Hemmer that reproduce one of the aspects of 
+        us as human beings. It was made as part of the first challenge of the GitHub Noops, the Hexbot.
+      </p>
+      <p>
+        The artwork can be filled in two ways, either programatically (so you can see the finished artwork quickly),
+        or via the hexbot so you can see how it is filled little by little through the API responses of the bot.
+      </p>
+      <p>
+        The default option is by default, but you can change it with this switch.
+      </p>
+      <canvas id="myCanvas"></canvas>
+      <p>
+        If you want to see the process of how I solved this, passing through
+        a file with millions of divs and what I learned about web rendering in the way, click here.
+      </p>
+  </main>
+  <footer class="footer">
+    <p class="footer-text">Made with 💙 by roeeyn</p>
+  </footer>
 </body>
+<script>
+
+  const getLocalRandomColor = () => '#' + Math.floor(Math.random()*16777215).toString(16);
+
+  const getAsyncRandomColor = () => new Promise((resolve, reject) => {
+    setTimeout(() => resolve(getLocalRandomColor()), 10);
+  });
+
+  const loadSingleSection = async ({ mainI, initialWidth, initialHeight, ctx, squareSize }) => {
+    const exponent = Math.pow(2, mainI);    
+    for(let i=0; i < exponent*initialWidth; i++){
+      for(let j=0; j < exponent*initialHeight; j++){
+        ctx.fillStyle = await getLocalRandomColor();
+        const xPosition = initialWidth*squareSize*mainI + i*squareSize/exponent;
+        const yPosition = j*squareSize/exponent;
+        const squareSide = squareSize/exponent;
+        ctx.fillRect(xPosition, yPosition, squareSide, squareSide);
+      }
+    }
+  };
+
+  const fillCanvas = (
+    sectionNumber=5,
+    initialWidth=12,
+    initialHeight=34,
+    squareSize=((window.innerWidth - 45 - 150)/5)/12 /* Its the inner width of the window minus the 
+    body margin minus the border divided by the 5 sections and the 12 initial width */
+  ) => {
+
+    // ************* Sections Number **********************
+    // @param sectionNumber
+    // ****************************************************
+
+    // ****** Width and Height Section (Squares) *********
+    // @param initialWidth
+    // @param initialHeight
+    // ****************************************************
+
+    // ********** Initial Square Size *********************
+    // @param squareSize (in px)
+    // ****************************************************
+
+    const canvas = document.getElementById('myCanvas');
+    canvas.height = squareSize*initialHeight;
+    canvas.width = squareSize*initialWidth*sectionNumber;
+
+    const context = canvas.getContext("2d");
+
+    for(let mainI=0; mainI < sectionNumber; mainI++) loadSingleSection({
+      mainI, initialWidth, initialHeight, ctx: context, squareSize
+    });
+
+  };
+
+  const onBodyLoad = () => fillCanvas();
+  
+</script>
+
 </html>
